@@ -220,7 +220,10 @@ def calc_pop_avg(populations, n):
     Returns:
         float: The average bacteria population size at time step n
     """
-    pass  # TODO
+    elements = []
+    for i in range(len(populations)):
+        elements.append(populations[i][n])
+    return np.mean(elements)
 
 
 def simulation_without_antibiotic(num_bacteria,
@@ -256,8 +259,29 @@ def simulation_without_antibiotic(num_bacteria,
         populations (list of lists or 2D array): populations[i][j] is the
             number of bacteria in trial i at time step j
     """
-    pass  # TODO
-
+    # instantiate bacteria and patient
+    bacteria = []
+    for i in range(num_bacteria):
+        bacteria.append(SimpleBacteria(birth_prob, death_prob))
+    patient = Patient(bacteria, max_pop)
+    
+    populations = []
+    for i in range(num_trials):
+        populations.append([])
+        
+    # simulation
+    for i in range(num_trials):   
+        patient = Patient(bacteria, max_pop)
+        populations[i].append(num_bacteria)
+        for j in range(299):
+            populations[i].append(patient.update())
+            
+    # calculate the averages for each time step
+    averages = []
+    for i in range(300):
+        averages.append(calc_pop_avg(populations, i))
+    # plot 
+    return make_one_curve_plot(np.linspace(0, 299, 300) , averages, "Timestep", "Average Population", "Without Antibiotic")
 
 # When you are ready to run the simulation, uncomment the next line
 # populations = simulation_without_antibiotic(100, 1000, 0.1, 0.025, 50)
@@ -287,7 +311,14 @@ def calc_pop_std(populations, t):
         float: the standard deviation of populations across different trials at
              a specific time step
     """
-    pass  # TODO
+    mean = calc_pop_avg(populations, t)
+    elements = []
+    for i in range(len(populations)):
+        elements.append(populations[i][t])
+    sigma = [x-mean for x in elements]
+    sigma = [x**2 for x in sigma]
+    return (sum(sigma) / len(sigma)) ** 0.5
+    
 
 
 def calc_95_ci(populations, t):
@@ -311,7 +342,10 @@ def calc_95_ci(populations, t):
 
         I.e., you should return a tuple containing (mean, width)
     """
-    pass  # TODO
+    mean = calc_pop_avg(populations, t)
+    sigma = calc_pop_std(populations, t)
+    sem = sigma / (len(populations) ** 0.5)
+    return (mean, 1.96 * sem)
 
 
 ##########################
