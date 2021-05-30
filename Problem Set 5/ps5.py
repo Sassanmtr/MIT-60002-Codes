@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+ # -*- coding: utf-8 -*-
 # Problem Set 5: Experimental Analysis
 # Name: 
 # Collaborators (discussion):
@@ -163,9 +163,10 @@ def generate_models(x, y, degs):
         a list of pylab arrays, where each array is a 1-d array of coefficients
         that minimizes the squared error of the fitting polynomial
     """
-    # TODO
-    pass
-
+    model_list = []
+    for deg in degs:
+        model_list.append(pylab.polyfit(x, y, deg))
+    return model_list
 
 def r_squared(y, estimated):
     """

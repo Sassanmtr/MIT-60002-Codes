@@ -79,7 +79,7 @@ def make_two_curve_plot(x_coords,
 ##########################
 
 
-random.seed(0)
+
 
 class SimpleBacteria(object):
     """A simple bacteria cell with no antibiotic resistance"""
